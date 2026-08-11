@@ -1,7 +1,7 @@
 export default function Home() {
   return (
-    <div>
+    <main className="grow">
       <h1>Welcome to the Recipe App</h1>
-    </div>
+    </main>
   );
 }
