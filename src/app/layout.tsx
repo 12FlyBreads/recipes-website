@@ -11,16 +11,20 @@ export const metadata: Metadata = {
   description: "A simple recipe app built with Next.js 13 and TypeScript.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${inter.variable} antialiased`}
-    >
-      <Header />
-      
-      <Footer />
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="pt-BR">
+      <body
+        className={`${inter.variable} antialiased min-h-screen flex flex-col`}
+      >
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
