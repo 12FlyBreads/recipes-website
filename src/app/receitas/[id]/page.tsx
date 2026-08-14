@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { recipes } from "@/lib/data";
 import InfoPill from "@/components/InfoPill";
+import PreparationStep from "@/components/PreparationStep";
 
 interface RecipePageProps {
     params: Promise<{
@@ -49,7 +50,12 @@ export default async function ReceitaPage({ params }: RecipePageProps) {
                                 </ul>
                             </div>
                             <div>
-                                <h2 className="text-xl font-bold mb-4">Modo de Preparo</h2> 
+                                <h2 className="text-xl font-bold mb-4">Modo de Preparo</h2>
+                                <ol className="space-y-4">
+                                     {recipe.instructions.map((instruction, index) => (
+                                        <PreparationStep key={index} index={index + 1} description={instruction}/>
+                                    ))}
+                                </ol>
                             </div>
                         </div>
                     </div>
