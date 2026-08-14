@@ -1,3 +1,4 @@
+import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -9,6 +10,16 @@ export default function Home() {
           <h1 className="text-5xl font-bold">Receitas Deliciosas</h1>
           <p className="text-xl">Descubra receitas simples e saborosas para todas as ocasiões.</p>
           <Link className="bg-orange-500 hover:bg-orange-700 transition-colors text-white font-bold rounded-lg px-3 py-2" href="/receitas">Ver todas as receitas</Link>
+        </div>
+      </section>
+
+      {/* seção de receitas em destaque */}
+      <section>
+        <div className="container mx-auto">
+          <h2>Receitas em Destaque</h2>
+
+          {/* cards */}
+          <Link href="/receitas">Ver todas as receitas<ChevronRightIcon /></Link>
         </div>
       </section>
     </main>
