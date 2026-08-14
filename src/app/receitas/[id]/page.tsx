@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { recipes } from "@/lib/data";
+import InfoPill from "@/components/InfoPill";
 
 interface RecipePageProps {
     params: Promise<{
@@ -32,8 +33,11 @@ export default async function ReceitaPage({ params }: RecipePageProps) {
                             <h1 className="text-3xl font-bold mb-2">{recipe.title}</h1>
                             <p>{recipe.description}</p>
                         </div>
-                        <div>
-                            { /* TODO: Lista de ingredientes */}
+                        <div className="flex gap-4">
+                            <InfoPill title="Preparo" info={recipe.prepTime}/>
+                            <InfoPill title="Cozimento" info={recipe.cookTime}/>
+                            <InfoPill title="Porções" info={recipe.servings}/>
+                            <InfoPill title="Categoria" info={recipe.category}/>
                         </div>
                         <div className="grid grid-cols-2">
                             <div>
