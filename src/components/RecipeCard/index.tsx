@@ -1,16 +1,21 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Recipe } from "@/lib/data";
 
-export default function RecipeCard() {
+interface RecipeCardProps {
+    recipe: Recipe
+}
+
+export default function RecipeCard( {recipe}: RecipeCardProps ) {
     return (
-        <Link href="">
+        <Link href="{`/receitas/${recipe.id}`}">
             <div className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="relative h-48 w-full">
-                    <Image src="/receitas/salada-caprese.png" alt="Imagem da Receita" fill />
+                    <Image src={recipe.image} alt={recipe.title} fill />
                 </div>
                 <div className="flex flex-col p-4 gap-2">
-                    <h3 className="text-lg font-bold">Titulo da Receita</h3>
-                    <p>Descrição da Receita</p>
+                    <h3 className="text-lg font-bold">{recipe.title}</h3>
+                    <p>{recipe.description}</p>
                 </div>
             </div>
         </Link>
