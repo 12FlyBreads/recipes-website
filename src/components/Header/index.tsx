@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function Header() {
     return (
-        <header className="w-full bg-white text-black py-4">
+        <header className="w-full bg-white text-black py-4 border-b border-slate-200 drop-shadow-lg">
             <div className="container mx-auto flex justify-between">
                 <Link className="text-xl font-bold hover:scale-105 transition-all" href="/">Receitas Deliciosas</Link>
                 <nav className="flex gap-6">
