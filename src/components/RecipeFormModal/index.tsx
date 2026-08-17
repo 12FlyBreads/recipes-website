@@ -66,11 +66,17 @@ export default function RecipeFormModal({
   })
 
   const onSubmit = (data: RecipeFormData) => {
-    console.log(data);
+    const RecipeData = {
+      ...data,
+      ingredients: data.ingredients.map((ingredient) => ingredient.value),
+        instructions: data.instructions.map((instruction) => instruction.value),
+    }
+    console.log(RecipeData);
     reset();
+    onClose();
   };
 
-  const inputStyle = "p-2 border border-zinc-200 rounded-md grow";
+  const inputStyle = "p-2 border border-zinc-200 rounded-md grow w-full";
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -193,13 +199,16 @@ export default function RecipeFormModal({
             <div className="flex flex-col gap-1">
             {ingredientFields.map((field, index) => (
                 <div key={field.id} className="flex gap-2 w-full">
-                <input
-                placeholder="Digite o ingrediente..."
-                  type="text"
-                  id="ingredients"
-                  className={inputStyle}
-                    {...register(`ingredients.${index}.value`)}
-                ></input>
+                <div className="grow">
+                    <input
+                    placeholder="Digite o ingrediente..."
+                      type="text"
+                      id="ingredients"
+                      className={inputStyle}
+                        {...register(`ingredients.${index}.value`)}
+                    ></input>
+                    {errors.ingredients?.[index]?.value && <span className="text-sm text-red-500">{errors.ingredients?.[index]?.value.message}</span>}
+                </div>
                 { ingredientFields.length > 1 && (
                 <button
                   type="button"
@@ -226,7 +235,10 @@ export default function RecipeFormModal({
             <div className="flex flex-col gap-1">
               {instructionFields.map((field, index) => (
                 <div key={field.id} className="flex gap-2 w-full">
-                <textarea id="instructions" placeholder="Digite a instrução..." className={inputStyle} {...register(`instructions.${index}.value`)}></textarea>
+                <div className="grow">
+                    <textarea id="instructions" placeholder="Digite a instrução..." className={inputStyle} {...register(`instructions.${index}.value`)}></textarea>
+                    {errors.instructions?.[index]?.value && <span className="text-sm text-red-500">{errors.instructions?.[index]?.value.message}</span>}
+                </div>
                 { instructionFields.length > 1 && (
                 <button
                   type="button"
