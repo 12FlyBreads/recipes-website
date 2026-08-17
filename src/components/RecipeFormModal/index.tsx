@@ -5,10 +5,12 @@ import {
   recipeSchema,
 } from "@/lib/formValidationSchemas/recipeSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Recipe } from "@/lib/data";
 
 interface RecipeFormModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSave: (recipe: Omit<Recipe, 'id'>) => void;
 }
 
 const DEFAULT_VALUES: RecipeFormData = {
@@ -34,6 +36,7 @@ const DEFAULT_VALUES: RecipeFormData = {
 export default function RecipeFormModal({
   isOpen,
   onClose,
+  onSave
 }: RecipeFormModalProps) {
   const {
     register,
@@ -72,6 +75,7 @@ export default function RecipeFormModal({
         instructions: data.instructions.map((instruction) => instruction.value),
     }
     console.log(RecipeData);
+    onSave(RecipeData);
     reset();
     onClose();
   };
@@ -132,11 +136,11 @@ export default function RecipeFormModal({
             ) : null}
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="imageUrl">URL da Imagem</label>
+            <label htmlFor="image">URL da Imagem</label>
             <input
               type="text"
               className={inputStyle}
-              id="imageUrl"
+              id="image"
               placeholder="https://example.com/image.jpg"
               {...register("image")}
             ></input>
