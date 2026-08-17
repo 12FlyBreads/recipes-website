@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
   RecipeFormData,
@@ -11,6 +11,26 @@ interface RecipeFormModalProps {
   onClose: () => void;
 }
 
+const DEFAULT_VALUES: RecipeFormData = {
+    title: "",
+    category: "",
+    description: "",
+    image: "",
+    prepTime: "",
+    cookTime: "",
+    servings: 1,
+    ingredients: [
+      {
+        value: ""
+      }
+    ],
+    instructions: [
+      {
+        value: ""
+      }
+    ]
+  };
+
 export default function RecipeFormModal({
   isOpen,
   onClose,
@@ -20,10 +40,30 @@ export default function RecipeFormModal({
     reset,
     handleSubmit,
     formState: { errors },
+    control
   } = useForm<RecipeFormData>({
     resolver: yupResolver(recipeSchema),
     mode: "onSubmit",
+    defaultValues: DEFAULT_VALUES
   });
+
+  const{
+    fields: ingredientFields, 
+    append: appendIngredient, 
+    remove: removeIngredient
+  } = useFieldArray({
+    control,
+    name: "ingredients"
+  })
+
+  const{
+    fields: instructionFields, 
+    append: appendInstruction, 
+    remove: removeInstruction
+  } = useFieldArray({
+    control,
+    name: "instructions"
+  })
 
   const onSubmit = (data: RecipeFormData) => {
     console.log(data);
@@ -151,21 +191,29 @@ export default function RecipeFormModal({
           <div className="flex flex-col gap-1">
             <label htmlFor="ingredients">Ingredientes</label>
             <div className="flex flex-col gap-1">
-              <div className="flex gap-2 w-full">
+            {ingredientFields.map((field, index) => (
+                <div key={field.id} className="flex gap-2 w-full">
                 <input
+                placeholder="Digite o ingrediente..."
                   type="text"
                   id="ingredients"
                   className={inputStyle}
+                    {...register(`ingredients.${index}.value`)}
                 ></input>
+                { ingredientFields.length > 1 && (
                 <button
                   type="button"
+                  onClick={() => removeIngredient(index)}
                   className="px-4 py-2 font-medium bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors"
                 >
                   Remover
                 </button>
+              ) }
               </div>
+            ))}
               <button
                 type="button"
+                onClick={() => appendIngredient({ value: "" })}
                 className="px-4 py-2 font-medium bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors h-fit w-fit"
               >
                 Adicionar Ingrediente
@@ -176,17 +224,23 @@ export default function RecipeFormModal({
           <div className="flex flex-col gap-1">
             <label htmlFor="instructions">Intruções</label>
             <div className="flex flex-col gap-1">
-              <div className="flex gap-2 w-full">
-                <textarea id="instructions" className={inputStyle}></textarea>
+              {instructionFields.map((field, index) => (
+                <div key={field.id} className="flex gap-2 w-full">
+                <textarea id="instructions" placeholder="Digite a instrução..." className={inputStyle} {...register(`instructions.${index}.value`)}></textarea>
+                { instructionFields.length > 1 && (
                 <button
                   type="button"
+                    onClick={() => removeInstruction(index)}
                   className="px-4 py-2 font-medium bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors h-fit"
                 >
                   Remover
                 </button>
+                ) }
               </div>
+              ))}
               <button
                 type="button"
+                onClick={() => appendInstruction({ value: "" })}
                 className="px-4 py-2 font-medium bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors h-fit w-fit"
               >
                 Adicionar Instrução
