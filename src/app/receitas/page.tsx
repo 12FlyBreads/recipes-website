@@ -10,13 +10,37 @@ import type { Recipe } from "@/lib/data";
 export default function ReceitasPage() {
     const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
     const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes);
+    const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
+    const [selectedRecipe, setSelectedRecipe] = useState<Recipe | undefined>(undefined);
 
-    const handleCreateRecipe = (recipeData : Omit<Recipe, 'id'>) => {
-        const newRecipe : Recipe = {
-            ...recipeData,
-            id: (recipes.length + 1).toString(),
-        };
-        setRecipes((prev) => [...prev, newRecipe]);
+    const handleOpenCreateModal = () => {
+        setModalMode('create');
+        setSelectedRecipe(undefined);
+        setIsRecipeModalOpen(true);
+    }
+
+    const handleOpenEditModal = (recipe: Recipe) => {
+        setModalMode('edit');
+        setSelectedRecipe(recipe);
+        setIsRecipeModalOpen(true);
+    }
+
+    const handleSaveRecipe = (recipeData : Omit<Recipe, 'id'> | Recipe) => {
+        if(modalMode === 'create') {
+            const newRecipe : Recipe = {
+                ...recipeData,
+                id: (recipes.length + 1).toString(),
+            };
+            setRecipes((prev) => [...prev, newRecipe]);
+        } else {
+            const updateRecipe = recipeData as Recipe;
+            setRecipes((prev) => prev.map((recipe) => recipe.id === updateRecipe.id ? updateRecipe : recipe));
+        }
+        handleCloseModal();
+    }
+
+    const handleCloseModal = () => {
+        setIsRecipeModalOpen(false);
     }
 
     return (
@@ -24,7 +48,7 @@ export default function ReceitasPage() {
             <div className="container mx-auto">
                 <div className="flex justify-between w-full">
                     <h1 className="text-3xl font-bold">Todas as Receitas</h1>
-                    <button onClick={() => setIsRecipeModalOpen(true)} className="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-gray-800 transition-colors bg-black">
+                    <button onClick={handleOpenCreateModal} className="flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-gray-800 transition-colors bg-black">
                         <Plus size={16}/>
                         Nova Receita
                     </button>
@@ -32,11 +56,11 @@ export default function ReceitasPage() {
 
                 <div className="grid grid-cols-3 gap-8 mt-8">
                     { recipes.map((recipe) => 
-                        ( <RecipeCard key={recipe.id} recipe={recipe} /> ))
+                        ( <RecipeCard key={recipe.id} recipe={recipe} onEdit={() => handleOpenEditModal(recipe)} /> ))
                     }
                 </div>
             </div>
-            <RecipeFormModal isOpen={isRecipeModalOpen} onClose={() => setIsRecipeModalOpen(false)} onSave={handleCreateRecipe} />
+            <RecipeFormModal isOpen={isRecipeModalOpen} onClose={handleCloseModal} onSave={handleSaveRecipe} mode={modalMode} recipe={selectedRecipe} />
         </main>
     )
 }

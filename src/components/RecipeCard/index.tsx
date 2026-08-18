@@ -4,16 +4,20 @@ import { Recipe } from "@/lib/data";
 import { Edit, Trash2 } from "lucide-react";
 
 interface RecipeCardProps {
-    recipe: Recipe
+    recipe: Recipe;
+    onEdit: () => void;
 }
 
-export default function RecipeCard( {recipe}: RecipeCardProps ) {
+export default function RecipeCard( {recipe, onEdit}: RecipeCardProps ) {
     const handleEdit = (e : React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        e.stopPropagation();
+        onEdit();
     }
 
     const handleDelete = (e : React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        e.stopPropagation();
     }
 
     return (
@@ -32,7 +36,7 @@ export default function RecipeCard( {recipe}: RecipeCardProps ) {
                             {recipe.category}
                         </span>
                         <div className="flex gap-2"> 
-                            <button className="p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors cursor-pointer" type="button" onClick={handleDelete}>
+                            <button className="p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors cursor-pointer" type="button" onClick={handleEdit}>
                                 <Edit size={16}/>
                             </button>
                             <button className="p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors cursor-pointer" type="button" onClick={handleDelete}>
