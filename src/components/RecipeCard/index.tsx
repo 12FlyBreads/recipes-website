@@ -5,21 +5,25 @@ import { Edit, Trash2 } from "lucide-react";
 
 interface RecipeCardProps {
     recipe: Recipe;
-    onEdit: () => void;
-    onDelete: () => void;
+    onEdit?: () => void;
+    onDelete?: () => void;
 }
 
 export default function RecipeCard( {recipe, onEdit, onDelete}: RecipeCardProps ) {
     const handleEdit = (e : React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        onEdit();
+        if(onEdit) {
+            onEdit();
+        }
     }
 
     const handleDelete = (e : React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        onDelete();
+        if(onDelete) {
+            onDelete();
+        }
     }
 
     return (
@@ -38,12 +42,16 @@ export default function RecipeCard( {recipe, onEdit, onDelete}: RecipeCardProps 
                             {recipe.category}
                         </span>
                         <div className="flex gap-2"> 
-                            <button className="p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors cursor-pointer" type="button" onClick={handleEdit}>
-                                <Edit size={16}/>
-                            </button>
+                            {onEdit && (
+                                <button className="p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors cursor-pointer" type="button" onClick={handleEdit}>
+                                    <Edit size={16}/>
+                                </button>
+                            )}
+                            {onDelete && (
                             <button className="p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors cursor-pointer" type="button" onClick={handleDelete}>
                                 <Trash2 size={16}/>
                             </button>
+                            )}
                         </div>
                     </div>
                 </div>
